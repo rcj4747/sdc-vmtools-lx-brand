@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+export DH_VERBOSE = 1
+export PACKAGE_NAME = joyent-lxtools
+
+%:
+	dh $@ 
+
+override_dh_auto_install:
+	mkdir -p debian/$(PACKAGE_NAME)/etc/
+	# Install script uses debian_version to determine OS, remove when done
+	cp /etc/debian_version debian/$(PACKAGE_NAME)/etc/
+	./install.sh -i debian/$(PACKAGE_NAME)/
+	rm debian/$(PACKAGE_NAME)/etc/debian_version

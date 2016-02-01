@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+
+pkg=joyent-lxtools
+
+check_divert() {
+    if [ -z "$(dpkg-divert --list $1)" ]; then
+        dpkg-divert --add --package $pkg --rename --divert $1.$pkg $1
+    fi
+}
+
+## Do not edit DIVERSIONS, it is populated by ../install.sh
+DIVERSIONS="
+"
+
+if [ "$1" = "install" ] || [ "$1" = upgrade ]
+then
+    for div in $DIVERSIONS; do
+        check_divert $div
+    done
+fi
