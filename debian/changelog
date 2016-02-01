@@ -1,0 +1,5 @@
+joyent-lxtools (20160111-0ubuntu1) trusty; urgency=medium
+
+  * Add initial debian packaging (LP: #1463952)
+
+ -- Robert C Jennings <robert.jennings@canonical.com>  Mon, 01 Feb 2016 15:08:52 -0600

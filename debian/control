@@ -1,0 +1,20 @@
+Source: joyent-lxtools
+Section: admin
+Priority: optional
+Maintainer: Robert C Jennings <robert.jennings@canonical.com>
+XSBC-Original-Maintainer: Christopher Horrell <christopher@joyent.com>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
+Homepage: https://github.com/joyent/sdc-vmtools-lx-brand
+Vcs-Git: https://git.launchpad.net/~rcj/+git/joyent-lxtools
+Vcs-Browser: https://git.launchpad.net/~rcj/+git/joyent-lxtools
+
+Package: joyent-lxtools
+Architecture: any
+Depends: ${misc:Depends}, cloud-init
+Conflicts: joyent-mdata-client
+Description: Guest tools for operating within SmartOS LX-Brand zones.
+ The guest tools prepare the OS for operating within the LX-Brand
+ environment.  The guest tools are required for enabling ssh key creation
+ and meta data (user-script, operator-script etc.) functionality
+
