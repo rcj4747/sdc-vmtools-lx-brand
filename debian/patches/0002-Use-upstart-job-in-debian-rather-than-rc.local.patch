@@ -1,0 +1,46 @@
+From: Robert C Jennings <rcj4747@gmail.com>
+Date: Mon, 1 Feb 2016 16:36:36 -0600
+Subject: Use upstart job in debian rather than rc.local
+
+Upstart should be used for boot-time actions.  Remove
+the package's rc.local and reimplement in upstart.
+---
+ install.sh                          |  4 ++--
+ src/lib/smartdc/joyent-lxtools.conf | 13 +++++++++++++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+ create mode 100644 src/lib/smartdc/joyent-lxtools.conf
+
+diff --git a/install.sh b/install.sh
+index a2251e5..0805ceb 100755
+--- a/install.sh
++++ b/install.sh
+@@ -83,8 +83,8 @@ install_tools() {
+ install_debian() {
+   install_tools
+ 
+-  info "Installing custom rc.local file to $INSTALL_DIR/etc/rc.local..."
+-  cp ./src/lib/smartdc/joyent_rc.local $INSTALL_DIR/etc/rc.local
++  info "Installing upstart job to $INSTALL_DIR/etc/init/"
++  cp ./src/lib/smartdc/joyent-lxtools.conf $INSTALL_DIR/etc/init/
+ }
+ 
+ install_redhat() {
+diff --git a/src/lib/smartdc/joyent-lxtools.conf b/src/lib/smartdc/joyent-lxtools.conf
+new file mode 100644
+index 0000000..48e9939
+--- /dev/null
++++ b/src/lib/smartdc/joyent-lxtools.conf
+@@ -0,0 +1,13 @@
++# joyent-lxbrand - Joyent Smart Data Center configuration for LX-Brand Zones
++#
++# Copyright (c) 2015, Joyent, Inc. All rights reserved.
++# Copyright (c) 2015, Canonical, Inc. All rights reserved.
++#
++
++description "Runtime configuration for guests in a LX-Brand zone"
++
++start on (local-filesystems and container CONTAINER=smartos)
++
++pre-start script
++    /usr/lib/joyent-lxtools/lib/mount-zfs
++end script
