@@ -1,0 +1,37 @@
+From: Robert C Jennings <rcj4747@gmail.com>
+Date: Mon, 1 Feb 2016 16:55:35 -0600
+Subject: Add diversions for linked/wrapped files from install
+
+The debian packaging will manage diversion of linked files in
+preinst/postrm scripts.  This patch adds automated management of the
+file lists in those scripts from install.sh
+---
+ install.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/install.sh b/install.sh
+index 0805ceb..10d1856 100755
+--- a/install.sh
++++ b/install.sh
+@@ -58,6 +58,13 @@ if [[ ! -e "$INSTALL_DIR" ]] ; then
+   exit 1
+ fi
+ 
++add_diversion() {
++  # Files containing diversion lists to generate
++  for FILE in debian/preinst debian/postrm; do
++    sed -i "s#^\(DIVERSIONS=\"\)#\1\n$1#g" $FILE
++  done
++}
++
+ install_tools() {
+   info "Creating symlinks for binaries found in /native"
+ 
+@@ -68,6 +75,7 @@ install_tools() {
+     if [[ ! -e $INSTALL_DIR${binary} && ! -L $INSTALL_DIR${binary} ]]; then
+       mkdir -p ${INSTALL_DIR}/$(dirname ${binary})
+       ln -s /native${binary} ${INSTALL_DIR}/${binary}
++      add_diversion ${binary}
+     else
+       info "Binary ${binary} exits in installation. Skipping symlink creation."
+     fi
