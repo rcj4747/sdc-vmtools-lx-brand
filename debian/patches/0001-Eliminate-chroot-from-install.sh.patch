@@ -1,0 +1,25 @@
+From: Robert C Jennings <rcj4747@gmail.com>
+Date: Mon, 1 Feb 2016 15:46:43 -0600
+Subject: Eliminate chroot from install.sh
+
+The install script for the package uses chroot which is not available
+during debian package creation.  The chroot call isn't required to
+create symbolic links, so it has been removed.
+---
+ install.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/install.sh b/install.sh
+index e16f7d9..a2251e5 100755
+--- a/install.sh
++++ b/install.sh
+@@ -66,7 +66,8 @@ install_tools() {
+   # Note Values for ${binary} must be the full path
+   for binary in $SYMLINKS; do
+     if [[ ! -e $INSTALL_DIR${binary} && ! -L $INSTALL_DIR${binary} ]]; then
+-      chroot $INSTALL_DIR ln -s /native${binary} ${binary}
++      mkdir -p ${INSTALL_DIR}/$(dirname ${binary})
++      ln -s /native${binary} ${INSTALL_DIR}/${binary}
+     else
+       info "Binary ${binary} exits in installation. Skipping symlink creation."
+     fi
