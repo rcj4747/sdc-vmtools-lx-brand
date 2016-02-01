@@ -1,0 +1,56 @@
+From: Robert C Jennings <rcj4747@gmail.com>
+Date: Mon, 1 Feb 2016 16:40:23 -0600
+Subject: Do not call binaries in /native directly
+
+Scripts calling binaries in /native are unnecessary as these
+files are linked to /native by this package.
+---
+ src/lib/smartdc/common.lib  | 2 +-
+ src/lib/smartdc/mdata-fetch | 2 +-
+ src/lib/smartdc/mount-zfs   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/lib/smartdc/common.lib b/src/lib/smartdc/common.lib
+index c7558f2..b6333f1 100755
+--- a/src/lib/smartdc/common.lib
++++ b/src/lib/smartdc/common.lib
+@@ -12,7 +12,7 @@ export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}
+ export BASH_XTRACEFD=4
+ set -o xtrace
+ 
+-MDATA_GET='/native/usr/sbin/mdata-get'
++MDATA_GET='/usr/sbin/mdata-get'
+ 
+ # Common functions used by scripts /lib/smartdc
+ 
+diff --git a/src/lib/smartdc/mdata-fetch b/src/lib/smartdc/mdata-fetch
+index 6af43fc..59fc04c 100755
+--- a/src/lib/smartdc/mdata-fetch
++++ b/src/lib/smartdc/mdata-fetch
+@@ -2,7 +2,7 @@
+ #
+ # Copyright (c) 2015, Joyent, Inc. All rights reserved.
+ #
+-# Fetch metadata via /native/usr/sbin/mdata-get
++# Fetch metadata via /usr/sbin/mdata-get
+ 
+ # load common functions and vars
+ . /lib/smartdc/common.lib
+diff --git a/src/lib/smartdc/mount-zfs b/src/lib/smartdc/mount-zfs
+index dbf23ca..ad46bb6 100755
+--- a/src/lib/smartdc/mount-zfs
++++ b/src/lib/smartdc/mount-zfs
+@@ -9,11 +9,11 @@
+ 
+ smartdc_info "Mounting all ZFS filesystems"
+ 
+-/native/usr/sbin/zfs mount -va
++/usr/sbin/zfs mount -va
+ zfs_mount_exit=$?
+ 
+ if [[ ${zfs_mount_exit} -gt 0 ]]; then
+-  smartdc_info "WARNING: /native/usr/sbin/zfs mount -va failed: exited \
++  smartdc_info "WARNING: /usr/sbin/zfs mount -va failed: exited \
+     ${zfs_mount_exit}"
+ fi
+ 

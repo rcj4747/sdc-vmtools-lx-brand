@@ -1,2 +1,3 @@
 0001-Eliminate-chroot-from-install.sh.patch
 0002-Use-upstart-job-in-debian-rather-than-rc.local.patch
+0003-Do-not-call-binaries-in-native-directly.patch
