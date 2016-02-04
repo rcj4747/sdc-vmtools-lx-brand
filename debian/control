@@ -11,7 +11,7 @@ Vcs-Browser: https://git.launchpad.net/~rcj/+git/joyent-lxtools
 
 Package: joyent-lxtools
 Architecture: any
-Depends: ${misc:Depends}, cloud-init
+Depends: ${misc:Depends}, cloud-init, awk
 Conflicts: joyent-mdata-client
 Description: Guest tools for operating within SmartOS LX-Brand zones.
  The guest tools prepare the OS for operating within the LX-Brand
