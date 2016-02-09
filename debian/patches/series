@@ -3,3 +3,4 @@
 0003-Do-not-call-binaries-in-native-directly.patch
 0004-Add-diversions-for-linked-wrapped-files-from-install.patch
 0005-Make-destination-directory-prior-to-installation.patch
+0006-Add-cloud-init-config-and-platform-fixups.patch

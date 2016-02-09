@@ -1,0 +1,74 @@
+From: Robert C Jennings <robert.jennings@canonical.com>
+Date: Mon, 8 Feb 2016 21:16:29 -0600
+Subject: Add cloud-init config and platform fixups
+
+---
+ src/etc/cloud/cloud.cfg.d/80_joyent_container.cfg     |   31 ++++++++++++++++++
+ src/etc/cloud/cloud.cfg.d/92_joyent_dpkg_override.cfg |    3 ++
+ src/etc/init/joyent-container-fixups.conf             |   12 +++++++
+ 3 files changed, 46 insertions(+)
+ create mode 100644 src/etc/cloud/cloud.cfg.d/80_joyent_container.cfg
+ create mode 100644 src/etc/cloud/cloud.cfg.d/92_joyent_dpkg_override.cfg
+ create mode 100644 src/etc/init/joyent-container-fixups.conf
+
+Index: b/src/etc/cloud/cloud.cfg.d/80_joyent_container.cfg
+===================================================================
+--- /dev/null
++++ b/src/etc/cloud/cloud.cfg.d/80_joyent_container.cfg
+@@ -0,0 +1,31 @@
++# Joyent LX-Brand Container environment specific configuration.
++# Removing this file will return cloud-init to the default state.
++
++# Redefine the module list by disabling the vendor script execution
++# as it is handled via cloud-init.
++cloud_final_modules:
++ - scripts-per-once
++ - scripts-per-boot
++ - scripts-per-instance
++ - scripts-user
++ - keys-to-console
++ - phone-home
++ - final-message
++
++# Defines the Joyent local archive
++system_info:
++   package_mirrors:
++     - arches: [i386, amd64]
++       failsafe:
++         primary: http://archive.ubuntu.com/ubuntu
++         security: http://security.ubuntu.com/ubuntu
++       search:
++         primary:
++           - http://%(availability_zone)s.joyent.clouds.archive.ubuntu.com/ubuntu/
++           - http://joyent.clouds.archive.ubuntu.com/ubuntu/
++         security: []
++     - arches: [armhf, armel, default]
++       failsafe:
++         primary: http://ports.ubuntu.com/ubuntu-ports
++         security: http://ports.ubuntu.com/ubuntu-ports
++
+Index: b/src/etc/cloud/cloud.cfg.d/92_joyent_dpkg_override.cfg
+===================================================================
+--- /dev/null
++++ b/src/etc/cloud/cloud.cfg.d/92_joyent_dpkg_override.cfg
+@@ -0,0 +1,3 @@
++# Override the cloud-init datasource_list to use only the SmartOS datasource
++datasource_list: [ SmartOS ]
++
+Index: b/src/etc/init/joyent-container-fixups.conf
+===================================================================
+--- /dev/null
++++ b/src/etc/init/joyent-container-fixups.conf
+@@ -0,0 +1,12 @@
++description "Fixups for Joyent LX-Brand container environment"
++
++# Starting on /run which is emitted by Joyent's mountall override
++start on mounted MOUNTPOINT=/run
++console output
++
++emits mounted
++
++script
++    # Emit 'mounted' event for root fs as environment lacks this
++    initctl emit --no-wait mounted MOUNTPOINT=/
++end script
