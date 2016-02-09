@@ -1,3 +1,9 @@
+joyent-lxtools (20160111-0ubuntu2) trusty; urgency=medium
+
+  * Add cloud-init confuration and platform fixups
+
+ -- Robert C Jennings <robert.jennings@canonical.com>  Mon, 08 Feb 2016 21:30:33 -0600
+
 joyent-lxtools (20160111-0ubuntu1) trusty; urgency=medium
 
   * Add initial debian packaging (LP: #1463952)

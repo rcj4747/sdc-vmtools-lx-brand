@@ -10,4 +10,8 @@ override_dh_auto_install:
 	# Install script uses debian_version to determine OS, remove when done
 	cp /etc/debian_version debian/$(PACKAGE_NAME)/etc/
 	./install.sh -i debian/$(PACKAGE_NAME)/
+	install -m 0755 -d debian/${PACKAGE_NAME}/etc/cloud/cloud.cfg.d/
+	install -D -m 0644 src/etc/cloud/cloud.cfg.d/* debian/${PACKAGE_NAME}/etc/cloud/cloud.cfg.d/
+	install -m 0755 -d debian/${PACKAGE_NAME}/etc/init/
+	install -D -m 0644 src/etc/init/joyent-container-fixups.conf debian/${PACKAGE_NAME}/etc/init/
 	rm debian/$(PACKAGE_NAME)/etc/debian_version
